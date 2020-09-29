@@ -12,6 +12,20 @@ TSAI EPAi Session 8 Assignment
 
 ## 3. Documentation for functions
 
+CONTENT_CHECK_FOR = [
+    'Faker',
+    'profile'
+    'namedtuple',
+    '__doc__',
+    'largest_blood_type',
+    'mean_current_location',
+    'oldest_person_age',
+    'average_age',
+    'faker_company_stock_data',
+    'stock_market_status',
+    'company'
+]
+
 **gen_fx_to_check_doc_string** :  
     - Its a closure function which generate function to test doc string length > 50  
     - doc_str_threshold is free variable  
