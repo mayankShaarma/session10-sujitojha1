@@ -16,7 +16,6 @@ CONTENT_CHECK_FOR = [
     'Faker',
     'profile'
     'namedtuple',
-    '__doc__',
     'largest_blood_type',
     'mean_current_location',
     'oldest_person_age',

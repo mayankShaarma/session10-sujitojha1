@@ -9,9 +9,8 @@ import time
 
 CONTENT_CHECK_FOR = [
     'Faker',
-    'profile'
+    'profile',
     'namedtuple',
-    '__doc_',
     'largest_blood_type',
     'mean_current_location',
     'oldest_person_age',
@@ -80,3 +79,7 @@ def test_all_functions_with_annotations():
     for function in functions:
         assert not function.__annotations__ is None, "You have dont have annotations defined for {}".format(function.__name__)
 
+def test_named_tuple_doc_string():
+    doc_string = session10.profile.__doc__
+
+    assert doc_string.contains('Faker library') == True, "Check profile named tuple doctring"
