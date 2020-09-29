@@ -98,3 +98,10 @@ def test_named_tuple_performance_vs_dict():
 
     ntple_time,dict_time = session10.average_age(session10.fake_profiles_tupple,session10.profiles_dict)
     assert ntple_time<dict_time, "Check the average_age function performance for named tuple"
+
+def test_stock_market_status_conditions():
+    stock_market_today_start, stock_market_today_high, stock_market_today_close = session10.stock_market_status()
+
+    assert stock_market_today_high>=stock_market_today_start, "Check the stock market data as high value should be higher than or equal open value always"
+
+    assert stock_market_today_high>=stock_market_today_close, "Check the stock market data as high value should be higher than or equal close value always"

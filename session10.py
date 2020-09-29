@@ -192,3 +192,5 @@ def stock_market_status(named_tuple):
     stock_market_today_close = sum([stock.Close for stock in stock_market_today])   
 
     print(f"Stock Market Start: {stock_market_today_start:7.2f},High: {stock_market_today_high:7.2f}, End: {stock_market_today_close:7.2f}")
+
+    return stock_market_today_start, stock_market_today_high, stock_market_today_close
