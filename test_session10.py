@@ -81,5 +81,7 @@ def test_all_functions_with_annotations():
 
 def test_named_tuple_doc_string():
     doc_string = session10.profile.__doc__
+    ssn_doc_string = session10.profile.ssn.__doc__
 
-    assert 'Faker library' in doc_string.contains, "Check profile named tuple doctring"
+    assert 'Faker library' in doc_string, "Check profile named tuple doctring"
+    assert "Social Security Number" in ssn_doc_string, "Check profile named tuple doctring"
