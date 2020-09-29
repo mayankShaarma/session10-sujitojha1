@@ -166,30 +166,10 @@ def faker_company_stock_data():
     
     return fake_company
 
-stock_market_status()
-```
-**user_counter**  
-    - Closure function to generate function with not only runs the function but also keep tracks of its count with user defined dicitionary  
-```python
-def user_counter(fn,cnt):
-    """ Closure function to create a counter function 
-    Counter will be saved as dictionary with key as function name
-    Args:
-        fn: function call to be counted
-        cnt: user defined counter for each user different
-    Return:
-        inner: function
-    """
-    key = ""
-    def inner(*args, **kwargs):
-        nonlocal key
-        key = fn.__name__
-        if key not in cnt:            
-            cnt[key] = 0
-        cnt[key] += 1
-        print('{0} has been called {1} times'.format(fn.__name__, cnt[key]))
-        return fn(*args, **kwargs)
-    return inner
+stock_market_status
+oldest_person_age
+average_age
+company
 ```
 
 
