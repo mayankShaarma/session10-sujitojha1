@@ -85,3 +85,16 @@ def test_named_tuple_doc_string():
 
     assert 'Faker library' in doc_string, "Check profile named tuple doctring"
     assert "Social Security Number" in ssn_doc_string, "Check profile named tuple doctring"
+
+def test_named_tuple_performance_vs_dict():
+    ntple_time, dict_time = session10.largest_blood_type(session10.fake_profiles_tupple, session10.profiles_dict)
+    assert ntple_time<dict_time, "Check the largest blood type function performance for named tuple"
+
+    ntple_time,dict_time = session10.mean_current_location(session10.fake_profiles_tupple,session10.profiles_dict)
+    assert ntple_time<dict_time, "Check the mean_current_location function performance for named tuple"
+
+    ntple_time,dict_time = session10.oldest_person_age(session10.fake_profiles_tupple,session10.profiles_dict)
+    assert ntple_time<dict_time, "Check the oldest_person_age function performance for named tuple"
+
+    ntple_time,dict_time = session10.average_age(session10.fake_profiles_tupple,session10.profiles_dict)
+    assert ntple_time<dict_time, "Check the average_age function performance for named tuple"

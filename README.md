@@ -1,7 +1,7 @@
 # session10-sujitojha1, Tuples and Named Tuples
-TSAI EPAi Session 8 Assignment
+TSAI EPAi Session 10 Assignment
 
-## 1. Objective: Scopes and Closures
+## 1. Objective: Tuple and named tuples
 
 - Use Faker library to get 10000 random profiles. Using namedtuple, calculate the largest blood type, mean-current_location, oldest_person_age and average age (add proper doc-strings).
 - Do the same thing above using a dictionary. Prove that namedtuple is faster.
