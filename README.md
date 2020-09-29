@@ -10,95 +10,164 @@ TSAI EPAi Session 10 Assignment
 
 - No readme or no docstring for each function, or no test cases, 0. Write test cases to check boundary conditions that might cause your code to fail. 
 
+## 2. Notebook & Results
+
+[session10_notebook_v1.ipynb](session10_notebook_v1.ipynb)
+
 ## 3. Documentation for functions
 
-CONTENT_CHECK_FOR = [
-    'Faker',
-    'profile'
-    'namedtuple',
-    'largest_blood_type',
-    'mean_current_location',
-    'oldest_person_age',
-    'average_age',
-    'faker_company_stock_data',
-    'stock_market_status',
-    'company'
-]
 
-**gen_fx_to_check_doc_string** :  
-    - Its a closure function which generate function to test doc string length > 50  
-    - doc_str_threshold is free variable  
+**Faker & Profile** :  
+    - Faker python library to generate fake profile
+    - Faker object have fake profile and fake company
+    - Updated the profile's doctring namedtuple
+    - test case to check docstring are updated
 ```python
-def gen_fx_to_check_doc_string():
-    """ Closure function to generate function to check doc string length > 50
-    Returns:
-        inner: function
-    """
-    doc_str_threshold = 50
-    def doc_length_check(fn):
-        fn_len = len(fn.__doc__.replace("\n",""))
-        print('Docstring: {0}\nCharacter Count = {1}'.format(fn.__doc__,fn_len))
-        return fn_len > doc_str_threshold
-    return doc_length_check
+from faker import Faker
+
+# Loading an Faker object
+faker = Faker()
+
+# Fake profile named tupple
+profile = namedtuple("Fake_Profile", sorted(faker.profile().keys()))
+profile.__doc__ = "Fake Profile Created using Faker library"
+profile.address.__doc__ = "Permanent Address"
+profile.birthdate.__doc__ = "Birth Date"
+profile.blood_group.__doc__ = "Blood Group e.g. A+,AB+, O,O+"
+profile.company.__doc__ = "Company"
+profile.current_location.__doc__ = "Current Location in Latitude and Longitude"
+profile.job.__doc__ = "Job Title"
+profile.mail.__doc__ = "email address"
+profile.name.__doc__ = "Name"
+profile.residence.__doc__ = "Residential Address"
+profile.sex.__doc__ = "Sex"
+profile.ssn.__doc__ = "Social Security Number"
+profile.username.__doc__ = "Username"
+profile.website.__doc__ = "Website"
 ```
-**check_doc_string**  
-    - it function created using above closure function  
 
-**gen_fx_next_fib_num**  
-    - Its a closure function that generates function to get next fibonacci number  
-    - Two free variables fib1 and fib2 to manage first two values of fibonacci  
+**namedtuple** :  
+    - Created 10000 profiles and 100 companies using namedtuple  
+    - Used dictionary to make these large named entities  
 ```python
-def gen_fx_next_fib_num():
-    """ Closure function to generate next fibonacci number
-    Returns:
-        fibonacci: function
-    """
-    fib1 = 0
-    fib2 = 0
-    def fibonacci():
-        nonlocal fib1, fib2
-        if fib1 ==0 and fib2 ==0:
-            fib2 = 1
-        else:
-            fib2, fib1 = fib1+ fib2, fib2
-        return fib1
-    return fibonacci
+# Created 10000 profile dict using namedtuple - profile
+profiles_dict_temp = {f"profile_{i}":profile(**faker.profile()) for i in range(10000)}
+
+# Created 10000 people named tuple using inside namedtupple - profile
+fake_profiles = namedtuple("Fake_Profiles", sorted(profiles_dict_temp))
+fake_profiles_tupple = fake_profiles(**profiles_dict_temp)
+
+# Created 10000 profile dict using dictionary - profile
+profiles_dict = {key:value._asdict()for key,value in profiles_dict_temp.items()}
+
+# Created 100 profile dict using namedtuple - faker_company_stock_data
+company_dict_temp = {f"company_{i}":faker_company_stock_data() for i in range(100)}
+
+# Created 100 people named tuple using inside namedtupple - faker_company_stock_data
+company_stock_market = namedtuple("CompanyStockMarket", sorted(company_dict_temp))
+company_stock_market_tupple = company_stock_market(**company_dict_temp)
 ```
-**fibonacci**  
-    - it function created using above closure function  
-
-**add, mul and div**  
-    - Are simple add, mul div function for demonstrating the counter function  
-
-**cnt**  
-    - Global dictionary to keep count of add mul and div function call  
-
-**counter**  
-    - Closure function to generate function with not only runs the function but also keep tracks of its count using global cnt dictionary
+**largest_blood_type**  
+    - Function to find the largest blood type  
+    - Used Counter from collections to convert a list to dictory of unique counts  
 ```python
-cnt={}
-def counter(fn):
-    """ Closure function to create a counter function 
-    Counter will be saved as dictionary with key as function name
-    Args:
-        fn: function call to be counted
-        cnt: is global counter
+def largest_blood_type(profiles_tpl,profiles_dict):
+    """ Find out the largest blood type in given profiles
+
+    Returns:
+        Performance for 200x times
+    """
+
+
+    start = perf_counter()
+    for i in range(200):
+        blood_group_list = [value['blood_group'] for value in profiles_dict.values()]
+        blood_group_summary = Counter(blood_group_list)
+        Max_blood_group = max(blood_group_summary, key=blood_group_summary.get) 
+
+    elapsed_dict = (perf_counter() - start)/100
+    print(f'Dictionary Results\nLargest blood group is {Max_blood_group} and average of 200 run it took {elapsed_dict*1000:4.2f} ms')
+
+
+    start = perf_counter()
+    for i in range(200):
+        blood_group_list = [i.blood_group for i in profiles_tpl]
+        blood_group_summary = Counter(blood_group_list)
+        Max_blood_group = max(blood_group_summary, key=blood_group_summary.get) 
+
+    elapsed_tpl = (perf_counter() - start)/100
+    print(f'Named Tuple Results\nLargest blood group is {Max_blood_group} and average of 200 run it took {elapsed_tpl*1000:4.2f} ms')
+
+    return elapsed_tpl,elapsed_dict
+```
+
+**mean_current_location**  
+    - Function to calculate mean latitude and longitude from 10000 fake profiles  
+    - Used reduce function to get sum of latitude and longitude and then dividing by length
+```python
+def mean_current_location(profiles_tpl,profiles_dict):
+    """ Calculates the mean of current location for all profiles
+
+    Returns:
+        Performance for 200x times
+    """
+
+    start = perf_counter()
+    for i in range(200):
+        Latitude,Longitude = reduce(lambda prev,next: (prev[0]+next[0],prev[1]+next[1]),[i['current_location'] for i in profiles_dict.values()],(0,0))
+        Latitude,Longitude = Latitude/10000,Longitude/10000
+
+    elapsed_dict = (perf_counter() - start)/200
+    print(f'Dictionary Results\nMean location: Latitude = {Latitude}, Longitude = {Longitude} and average of 200 run it took {elapsed_dict*1000:4.2f} ms')
+
+    start = perf_counter()
+    for i in range(200):
+        Latitude,Longitude = reduce(lambda prev,next: (prev[0]+next[0],prev[1]+next[1]),[i.current_location for i in profiles_tpl],(0,0))
+        Latitude,Longitude = Latitude/10000,Longitude/10000
+
+    elapsed_tpl = (perf_counter() - start)/200
+    print(f'Named Tuple Results\nMean location: Latitude = {Latitude}, Longitude = {Longitude} and average of 200 run it took {elapsed_tpl*1000:4.2f} ms')
+
+    return elapsed_tpl,elapsed_dict
+```
+**faker_company_stock_data**  
+    - Create fake stock company data for 100 companies
+    - Used random function to generate 10 day training value in a range of mean + std (+/-10%)
+    - Then selecting the open -> first, high -> max, close -> end values
+```python
+def faker_company_stock_data():
+    """Create fake company data with stock open, high and close for a day
+    100 companies with random stock prices
     Return:
-        inner: function
+        Named tuple with company stock exchange
     """
-    key = ""
-    def inner(*args, **kwargs):
-        global cnt
-        nonlocal key
-        key = fn.__name__
-        if key not in cnt:            
-            cnt[key] = 0
-        cnt[key] += 1
-        print('{0} has been called {1} times'.format(fn.__name__, cnt[key]))
-        return fn(*args, **kwargs)
-    return inner
-```
+    CompanyStockData = namedtuple('CompanyStockData',"Company_Name Symbol Open High Close")
 
+    # Get company name from Faker
+    fake_company_name = faker.company()
+
+    # Set the stock value from Rs. 50 to Rs. 5000 randomly
+    min_stock_val=50
+    max_stock_val = 5000
+    stock_value = (random.randint(0,100)*(max_stock_val-min_stock_val)/100 + min_stock_val)
+
+    # Set the interday change between -10% to +10%
+    min_change_val = -10
+    max_change_val = 10
+
+    # Random day tranding values created
+    day_trading = [stock_value + stock_value/100*random.randint(0,100)*(max_change_val-min_change_val)/100 + min_change_val for i in range(10)]
+
+    fake_company = CompanyStockData(Company_Name=fake_company_name,
+                                    Symbol=fake_company_name[0:4].upper(),
+                                    Open=day_trading[0], 
+                                    High=max(day_trading),
+                                    Close=day_trading[-1])
+    
+    return fake_company
+
+stock_market_status()
+```
 **user_counter**  
     - Closure function to generate function with not only runs the function but also keep tracks of its count with user defined dicitionary  
 ```python
@@ -126,23 +195,14 @@ def user_counter(fn,cnt):
 
 ## 4. Key Learnings
 
-### 4.1 GLOBAL & LOCAL SCOPES
-- Scope and namespaces 
-- Lexical scope of variable, bindings are stored in names spaces
-- Each scopes have their own namespaces 
-- Global scope is essentially the module scope. It spans a single file only.
-- There is not concept of truly global scope.
-- Built-in variables and global variables can be used anywhere inside module
+### 4.1 TUPLES AS A DATA STRUCTURE
 
-### 4.2 NON LOCAL SCOPES
-- We can define functions inside another function.
-- The scope which is neither local or global - it is called a non-local scope.
-- Can be accessed using keyword nonlocal
+### 4.2 NAMED TUPLES
 
-### 4.3 CLOSURES & APPLICATIONS
-- Tracking a user function call with counter
-- Free variables and closure. Function defined inside another function can access the outer (nonlocal) variables.
+### 4.3 NAMED TUPLES - MODIFYING AND EXTENDING
+
+### 4.3 NAMED TUPLES - DOCSTRING AND DEFAULT VALUES
 
 ## 5. References
-- [Closures and Decorators in Python](https://towardsdatascience.com/closures-and-decorators-in-python-2551abbc6eb6)
-- [EPAi Session 8, https://theschoolof.ai/](https://theschoolof.ai/)
+- [Pythonic way to convert dictory to named tuple](https://stackoverflow.com/questions/43921240/pythonic-way-to-convert-a-dictionary-into-namedtuple-or-another-hashable-dict-li)
+- [EPAi Session 10, https://theschoolof.ai/](https://theschoolof.ai/)
