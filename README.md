@@ -165,7 +165,6 @@ def faker_company_stock_data():
                                     Close=day_trading[-1])
     
     return fake_company
-
 stock_market_status
 oldest_person_age
 average_age
